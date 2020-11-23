@@ -1,0 +1,125 @@
+//CÓDIGO 1: Realizar un programa que accione mediante 4 switchs a un juego de luces diferente. 
+
+#define sw 7 //uso de #define para entrada digital del pin 7
+#define sw1 6 
+#define sw2 5
+#define sw3 4
+const int leds [6]={8,9,10,11,12,13}; // declaracion de un vector con los pines a usar
+int i=0; //contador del ciclo for
+int j=0; 
+int bin=0;
+int x=0;//Contador del segundo ciclo for
+int y=0;//Contador del tercer ciclo for
+int z=0;//contador del caurto ciclo for
+int a=0;//contador del quinto ciclo for
+void setup() {
+//configuración de pines como salida
+for(;i<6;i++){ // vector que contiene a los pines de entrada 
+    pinMode(leds[i],OUTPUT);
+  }
+i=0;  
+pinMode(sw,INPUT); // entrada digital del pin 7
+pinMode(sw1,INPUT); // entrada digital del pin 6
+pinMode(sw2,INPUT);
+pinMode(sw3,INPUT);
+}
+void loop() {
+ while(digitalRead(sw)==HIGH){ //Condicion que indica al boton 1 encendido
+  for(x=0;x<10;x++){
+    digitalWrite(leds[0],LOW);//Poner en estado alto a 5v la posicion 0
+    digitalWrite(leds[1],HIGH);
+    digitalWrite(leds[2],LOW); 
+    digitalWrite(leds[3],HIGH); 
+    digitalWrite(leds[4],LOW); 
+    digitalWrite(leds[5],HIGH);
+    delay(500); // Tiempo de detenerse el programa
+    digitalWrite(leds[0],LOW);
+    digitalWrite(leds[1],LOW);
+    digitalWrite(leds[2],LOW); 
+    digitalWrite(leds[3],LOW); 
+    digitalWrite(leds[4],LOW); 
+    digitalWrite(leds[5],LOW);
+    delay(500);// Tiempo de detenerse el programa
+  } 
+  digitalWrite(leds[0],LOW); 
+  digitalWrite(leds[1],HIGH);
+  digitalWrite(leds[2],LOW); 
+  digitalWrite(leds[3],HIGH); 
+  digitalWrite(leds[4],LOW); 
+  digitalWrite(leds[5],HIGH); 
+ }
+ while(digitalRead(sw1)==HIGH){
+  for(y=0;y<6;y++){    //Ciclo de repeticion 10 veces la instruccion
+    digitalWrite(leds[0],HIGH); //Poner 5v en cada posicion
+    digitalWrite(leds[1],LOW);
+    digitalWrite(leds[2],HIGH);
+    digitalWrite(leds[3],LOW); 
+    digitalWrite(leds[4],HIGH);
+    digitalWrite(leds[5],LOW); 
+    delay(500);    //detener el microcontrolador mediosegundo
+    digitalWrite(leds[0],LOW);//Poner 0v en cada posicion
+    digitalWrite(leds[1],LOW); 
+    digitalWrite(leds[2],LOW); 
+    digitalWrite(leds[3],LOW);
+    digitalWrite(leds[4],LOW);
+    digitalWrite(leds[5],LOW);
+    delay(500); //detener el microcontrolador mediosegundo
+
+  }
+}
+
+ while(digitalRead(sw2)==HIGH){ //Condicion que indica al boton 1 encendido
+  for(z=0;z<6;z++){
+    digitalWrite(leds[0],HIGH);//Poner en estado alto a 5v la posicion 0
+    delay(500);
+    digitalWrite(leds[0],LOW);
+    delay(500);
+    digitalWrite(leds[1],HIGH);
+    delay(500); 
+    digitalWrite(leds[1],LOW);
+    delay(500); 
+    digitalWrite(leds[2],HIGH);
+    delay(500); 
+    digitalWrite(leds[2],LOW);
+    delay(500); // Tiempo de detenerse el programa
+    digitalWrite(leds[3],HIGH);
+    delay(500);
+    digitalWrite(leds[3],LOW);
+    delay(500);
+    digitalWrite(leds[4],HIGH);
+    delay(500); 
+    digitalWrite(leds[4],LOW);
+    delay(500); 
+    digitalWrite(leds[5],HIGH);
+    delay(500); 
+    digitalWrite(leds[5],LOW);
+    delay(500);// Tiempo de detenerse el programa
+  } 
+ }
+
+ while(digitalRead(sw3)==HIGH){
+  for(a=0;a<10;a++){    //Ciclo de repeticion 10 veces la instruccion
+    digitalWrite(leds[0],HIGH); //Poner 5v en la posicion 0
+    digitalWrite(leds[5],HIGH); 
+    digitalWrite(leds[1],LOW); 
+    digitalWrite(leds[4],LOW); 
+    digitalWrite(leds[2],LOW); 
+    digitalWrite(leds[3],LOW); 
+    delay(500);    //detener el microcontrolador mediosegundo
+    digitalWrite(leds[1],HIGH);
+    digitalWrite(leds[4],HIGH); 
+    digitalWrite(leds[0],LOW); 
+    digitalWrite(leds[5],LOW);
+    delay(500); //detener el microcontrolador mediosegundo
+    digitalWrite(leds[2],HIGH); 
+    digitalWrite(leds[3],HIGH); 
+    digitalWrite(leds[1],LOW);
+    digitalWrite(leds[4],LOW); 
+    delay(500);//detener el microcontrolador mediosegundo
+    digitalWrite(leds[2],LOW); 
+    digitalWrite(leds[3],LOW);
+    delay(500);//detener el microcontrolador mediosegundo
+  }
+}
+ 
+}
