@@ -1,0 +1,288 @@
+int p[5];
+int q=0;
+const int unidades=12;
+const int A=8; //decodificador
+const int B=9;
+const int C=10;
+const int D=11;
+int cont=0;
+int vector=0;
+String dato;
+String dato2;
+String dato3;
+String dato4;
+String dato5;
+String dato6;
+String dato7;
+String dato8;
+int i;
+int aleatorio[5];
+
+void setup() {
+  
+  Serial.begin(9600);
+  pinMode(A,OUTPUT);
+  pinMode(B,OUTPUT);
+  pinMode(C,OUTPUT);
+  pinMode(D,OUTPUT);
+  pinMode(unidades,OUTPUT);
+  Serial.println("-Cuestionario-");
+  serialEvent();
+
+
+  
+
+
+}
+
+void loop() {
+  
+
+  
+}
+  
+void serialEvent(){
+  for( i=0; i<5; i++){
+    aleatorio[i]=random(1,8);
+  }
+    
+  
+  Serial.println(aleatorio[i]);
+  switch(aleatorio[i]){
+    case 1:
+    Serial.println("¿El año luz es 300.000 Km/s?");
+    if(Serial.available()>0){
+    dato = Serial.readString();
+    if(dato=="SI" || dato=="NO"){
+      if(dato=="SI"){
+        Serial.print("Acertaastes");
+        cont++;
+      }else {
+        Serial.println("Fallaste");
+      }
+    
+    }
+    }else{
+      Serial.println("Digita una respuesta correcta");
+    }
+    aleatorio[i]=random(1,8);
+    break;
+
+    case 2:
+    Serial.println("¿El universo procede del latin cosmos?");
+    if(Serial.available()>0){
+    dato2 = Serial.readString();
+    if(dato2=="SI" || dato2=="NO"){
+      if(dato2=="SI"){
+        Serial.print("Acertaastes");
+        cont++;
+      }else {
+        Serial.println("Fallaste");
+      }
+    
+    }
+    }else{
+      Serial.println("Digita una respuesta correcta");
+    }
+    aleatorio[i]=random(1,8);
+    break;
+
+    case 3:
+    Serial.println("¿2=3 si o no?");
+    if(Serial.available()>0){
+    dato3 = Serial.readString();
+    if(dato3=="SI" || dato3=="NO"){
+      if(dato3=="SI"){
+        Serial.print("Acertaastes");
+        cont++;
+      }else {
+        Serial.println("Fallaste");
+      }
+    
+    }
+    }else{
+      Serial.println("Digita una respuesta correcta");
+    }
+    aleatorio[i]=random(1,8);
+    break;
+    case 4:
+    Serial.println("¿Existe la luz?");
+    if(Serial.available()>0){
+    dato4 = Serial.readString();
+    if(dato4=="SI" || dato4=="NO"){
+      if(dato4=="SI"){
+        Serial.print("Acertaastes");
+        cont++;
+      }else {
+        Serial.println("Fallaste");
+      }
+    
+    }
+    }else{
+      Serial.println("Digita una respuesta correcta");
+    }
+    aleatorio[i]=random(1,8);
+    break;
+    case 5:
+    Serial.println("¿Saque 10?");
+    if(Serial.available()>0){
+    dato5 = Serial.readString();
+    if(dato5=="SI" || dato5=="NO"){
+      if(dato5=="SI"){
+        Serial.print("Acertaastes");
+        cont++;
+      }else {
+        Serial.println("Fallaste");
+      }
+    
+    }
+    }else{
+      Serial.println("Digita una respuesta correcta");
+    }
+    aleatorio[i]=random(1,8);
+    break;
+    
+
+    case 6:
+    Serial.println("¿El planeta tierra tiene 5 continents?");
+    if(Serial.available()>0){
+    dato6 = Serial.readString();
+    if(dato6=="SI" || dato6=="NO"){
+      if(dato=="SI"){
+        Serial.print("Acertaastes");
+        cont++;
+      }else {
+        Serial.println("Fallaste");
+      }
+    
+    }
+
+    }else{
+      Serial.println("Digita una respuesta correcta");
+    }
+    aleatorio[i]=random(1,8);
+    break;
+    
+
+    case 7:
+    Serial.println("¿La moneda tiene dos caras?");
+    if(Serial.available()>0){
+    dato7 = Serial.readString();
+    if(dato7=="SI" || dato7=="NO"){
+      if(dato=="SI"){
+        Serial.print("Acertaastes");
+        cont++;
+      }else {
+        Serial.println("Fallaste");
+      }
+    
+    }
+    }else{
+      Serial.println("Digita una respuesta correcta");
+    }
+    aleatorio[i]=random(1,8);
+    break;
+    
+
+    case 8:
+    Serial.println("¿El cielo es azul?");
+    if(Serial.available()>0){
+    dato8 = Serial.readString();
+    if(dato8=="SI" || dato8=="NO"){
+      if(dato8=="SI"){
+        Serial.print("Acertaastes");
+        cont++;
+      }else {
+        Serial.println("Fallaste");
+      }
+    
+    }
+    }else{
+      Serial.println("Digita una respuesta correcta");
+    }
+    aleatorio[i]=random(1,8);
+    break;
+    
+  }
+  
+  
+}
+
+   
+
+void Display (int j) {
+  switch (j) {
+    case 0:
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      digitalWrite(D, LOW);
+      break;
+    case 1:
+      digitalWrite(A, HIGH);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      digitalWrite(D, LOW);
+      break;
+    case 2:
+      digitalWrite(A, LOW);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, LOW);
+      digitalWrite(D, LOW);
+      break;
+    case 3:
+      digitalWrite(A, HIGH);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, LOW);
+      digitalWrite(D, LOW);
+      break;
+    case 4:
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, HIGH);
+      digitalWrite(D, LOW);
+      break;
+    case 5:
+      digitalWrite(A, HIGH);
+      digitalWrite(B, LOW);
+      digitalWrite(C, HIGH);
+      digitalWrite(D, LOW);
+      break;
+    case 6:
+      digitalWrite(A, LOW);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, HIGH);
+      digitalWrite(D, LOW);
+      break;
+    case 7:
+      digitalWrite(A, HIGH);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, HIGH);
+      digitalWrite(D, LOW);
+      break;
+    case 8:
+      digitalWrite(A, LOW);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      digitalWrite(D, HIGH);
+      break;
+    case 9:
+      digitalWrite(A, HIGH);
+      digitalWrite(B, LOW);
+      digitalWrite(C, LOW);
+      digitalWrite(D, HIGH);
+      break;
+    case 10:
+      digitalWrite(A, LOW);
+      digitalWrite(B, HIGH);
+      digitalWrite(C, LOW);
+      digitalWrite(D, HIGH);
+      break;
+
+
+
+
+  }
+}
+
+
