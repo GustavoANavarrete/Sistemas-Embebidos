@@ -1,0 +1,32 @@
+
+/*Deber 4: Realizar un sistema que codifique las vocales en palabras ingresadas por comunicacion serial. Este mensaje se ingresa por comunicacion serial en el master
+ *         este envia al esclavo para que realice la codificacion por comunicacion I2C. Luego, lo envia por el mismo medio y se muestra el resultado en un LCD en el
+ *         master: lacodificacion es:
+ *                                    - a = @
+ *                                    - e = #
+ *                                    - i = !
+ *                                    - o = *
+ *                                    - u = $
+ *         
+ * 
+ * 
+ */
+#include<Wire.h> //libreria I2C
+char dato;  //variable de almacenamiento de datos
+void setup() { 
+  Wire.begin(); //inicia cx i2c
+  Serial.begin(9600);// inicia cx serial
+}
+
+void loop() {
+  if(Serial.available()>0){ //verifica el puerto de cx
+    dato=Serial.read(); // almacena el dato en variable 
+    Wire.beginTransmission(4); // empieza cx i2c
+    Wire.write(dato); //envia dato
+    Wire.endTransmission();
+  }
+
+}
+
+
+ 
