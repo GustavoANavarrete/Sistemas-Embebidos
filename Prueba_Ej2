@@ -1,0 +1,115 @@
+/*
+ * Prueba Parcial
+ * Ejercicio 2: Realice la confirmación de secuencia de 5 pulsadores para activación de servo motor. 
+ *              Use interrupciones para dar tiempo al usuario de realizar la secuencia. Una vez ejecutada, confirme 
+ *              si es verdadera para activar el servor motor que gira a 100 grados. Caso contrario vuelva 
+ *              a pedir ingreso de secuencia.
+ *
+ *              La secuencia activación debe ser:
+ *                                                 Pulsador 2, pulsador 4, pulsador 1, pulsador 5 y pulsador 3
+ * 
+ */
+
+
+
+#include <Servo.h>
+
+
+
+Servo servo1;
+volatile int sec = 0;
+int cont = 0;
+
+int btn=8;
+int btn2=9;
+int btn3=10;
+int btn4=11;
+int btn5=12;
+int n=0;
+int act_servo=0;
+
+String clave = "24153";
+String user = "";
+
+
+
+void setup() {
+  Serial.begin(9600);
+  servo1.attach(5);
+  // put your setup code here, to run once:
+  pinMode(btn, INPUT);
+  pinMode(btn2, INPUT);
+  pinMode(btn3, INPUT);
+  pinMode(btn4, INPUT);
+  pinMode(btn5, INPUT);
+  SerialEvent();
+
+  attachInterrupt(0, activar, RISING);
+}
+
+void loop() {
+}
+
+void SerialEvent(){
+    if (sec > 0) {
+    while (n < 5) {
+      if (digitalRead(btn) == HIGH) {
+        delay(300);
+        user += String(1);
+        n++;
+      } else 
+      if (digitalRead(btn2) == HIGH) {
+        delay(300);
+        user += String(2);
+        n++;
+      } else 
+      if (digitalRead(btn3) == HIGH) {
+        delay(300);
+        user += String(3);
+        n++;
+
+      } else 
+      if (digitalRead(btn4) == HIGH) {
+        delay(300);
+        user += String(4);
+        n++;
+      } else 
+      if (digitalRead(btn5) == HIGH) {
+        delay(300);
+        user += String(5);
+        n++;
+      }
+    }
+    
+  }
+  if (act_servo > 0) {
+    Serial.println("El servo se movio");
+    servo1.write(100);
+
+  }
+  
+}
+
+void activar() {
+  cont++;
+  switch (cont) {
+    case 1:
+      Serial.println("Ingresa la contraseña");
+      sec++;
+      break;
+    case 2:
+      Serial.println("Clave verificada");
+      if (user == clave)  {
+        Serial.println("ingreso correcto");
+        act_servo++;
+      }
+      else 
+      Serial.println("ingreso incorrecto");
+      cont=0;
+      sec=0;
+      n=0;
+      act_servo = 0;
+      break;
+
+  }
+}
