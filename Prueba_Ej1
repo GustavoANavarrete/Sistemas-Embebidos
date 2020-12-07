@@ -1,0 +1,76 @@
+/*
+ * Prueba Parcial
+ * Ejercicio 1: Configure el tiempo de encendido y apagado de un led. Este proceso se lo debe realizar por medio de 
+ *              un conversor análogo digital que al mover el potenciómetro solo retornará un valor de la escala 
+ *              entera entre el 1 y el 10. Este valor será el que se debe configurar el timer 1 que dará el tiempo de 
+ *              funcionamiento del led. Este proceso debe ser controlado por una interrupción para dar la opción de 
+ *              modificar el valor del CAD antes de observar el funcionamiento del led y luego, presionar nuevamente 
+ *              la interrupción para verificar el funcionamiento. Se emplean mensajes seriales para validar todo el 
+ *              proceso. 
+ * 
+ */
+
+
+# include <TimerOne.h>
+int  estado=0;
+int cont=0;
+int led1=9;
+int conv;
+
+int seg=0;
+int activar;
+
+void setup() {
+  pinMode(led1, OUTPUT);
+
+
+  Serial.begin(9600);
+  attachInterrupt(0, activacion, RISING);
+
+
+}
+
+void loop() {
+  if (estado > 0) {
+    conv=analogRead(0);
+    conv=map(conv, 0, 1023, 1, 10);
+    delay(300);
+    Serial.println(conv);
+
+  }
+  if (activar>=1) {
+    digitalWrite(led1, HIGH);
+    delay(400);
+  }else{
+    digitalWrite(led1, LOW);
+    delay(400);
+    
+  }
+}
+void activacion () {
+  cont++;
+  switch (cont) {
+    case 1:
+      Serial.println("Use el potenciometro");
+      estado = 1;
+      break;
+    case 2:
+      Serial.println("Encendido" + String(conv));
+      Timer1.initialize(1000000);
+      Timer1.attachInterrupt(timer);
+      activar++;
+      break;
+
+      Serial.println("Apagado");
+      estado=0;
+      cont=0;
+      break;
+  }
+}
+
+void timer() {
+  seg++;
+  if (seg > conv) {
+    activar=0;
+  } 
+}
