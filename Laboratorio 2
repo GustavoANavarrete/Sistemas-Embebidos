@@ -1,0 +1,259 @@
+/*Laboratorio 2
+ * 
+ * 
+ */
+
+
+#include <LiquidCrystal.h> 
+#include <MsTimer2.h>      
+
+int potenH;    
+int potenM;     
+int hora=0;    
+int minuto=0;
+const int led1 = 4;   
+const int led2 = 5;   
+const int led3 = 6;   
+const int led4 = 7;   
+const int btn1=A2; 
+String sen1;  
+const int btn2=A3; 
+String sen2; 
+const int btn3=A4; 
+String sen3;  
+const int btn4=A5; 
+String sen4;  
+  
+int aleatoria=0;  
+int cont=0;     
+int int1 = 0;    
+int int2 = 0;    
+
+LiquidCrystal lcd(13,12,11,10,9,8);  
+
+void setup() {
+  MsTimer2::set(1000,tiempo);
+  Serial.begin(9600);
+  lcd.begin(16,4);
+  pinMode(led1,OUTPUT);
+  pinMode(led2,OUTPUT);
+  pinMode(led3,OUTPUT);
+  pinMode(led4,OUTPUT);
+  pinMode(btn1,INPUT);
+  pinMode(btn2,INPUT);
+  pinMode(btn3,INPUT);
+  pinMode(btn4,INPUT);
+  
+  attachInterrupt(1,activacion,LOW);
+  attachInterrupt(0,contador,LOW);
+
+
+}
+
+void loop(){
+
+}
+
+void contador() {   
+  switch(int1){
+    case 0:   
+      lcd.display();
+      lcd.setCursor(0,0);
+      lcd.print("Bienvenido");
+      lcd.setCursor(0,1);
+      lcd.print("Hora:");
+      lcd.setCursor(0,2);
+      lcd.print("1. Encendido");
+      MsTimer2::start();   
+      int1=1;
+    break;
+    
+    case 1:    
+      lcd.setCursor(12,2);
+      lcd.print(" ");
+      lcd.setCursor(0,0);
+      lcd.print("Bienvenido");
+      lcd.setCursor(0,1);
+      lcd.print("Hora: ");
+      lcd.setCursor(0,2);
+      lcd.print("2. Modos");
+      int1=2;
+    break;
+    
+    case 2:   
+      hora=0;
+      minuto=0;
+      MsTimer2::stop();    
+      lcd.clear();
+      lcd.noDisplay();
+      int1=0;
+      int2=0;
+    break;   
+  }
+}
+
+void activacion() {   
+  if(int1==2){
+    switch(int2){
+      case 0:  
+        lcd.setCursor(12,3);
+        lcd.print("  ");
+        lcd.setCursor(0,3);
+        lcd.print("1. Encender luces");
+        int2=1;
+      break;
+
+      case 1:   
+        lcd.setCursor(14,3);
+        lcd.print(" ");
+        lcd.setCursor(0,3);
+        lcd.print(" ");
+        lcd.setCursor(0,3);
+        lcd.print("2. Intercambiar");
+        int2=2;
+      break;
+
+      case 2:   
+        lcd.setCursor(0,3);
+        lcd.print(" ");
+        lcd.setCursor(0,3);
+        lcd.print("3. Sensores");
+        int2=3;
+      break;
+
+      default:    
+        int2=0;
+        
+      break;
+    }  
+  }
+}
+
+void tiempo() {
+  if(int1==1 || int1==2){
+
+    if(minuto<59)
+      minuto++;
+    else{
+      minuto=0; 
+      if(hora<23)
+        hora++; 
+      else
+        hora=0;   
+    } 
+    
+    if(int2==1)
+      luces();
+    else {
+      cont=0;
+      digitalWrite(led1,LOW);
+      digitalWrite(led2,LOW);
+      digitalWrite(led3,LOW);
+      digitalWrite(led4,LOW);   
+    }
+    if(int2==2)
+      cH();    
+    if(int2==3)
+      sensores();
+       
+    reloj();
+  }
+}
+
+void reloj(){
+  lcd.setCursor(7,1);
+  lcd.print("00:00"); 
+  if(hora<10){
+    lcd.setCursor(8,1);
+    lcd.print(hora); 
+  }
+  else{
+    lcd.setCursor(7,1);
+    lcd.print(hora); 
+  }
+  if(minuto<10){
+    lcd.setCursor(11,1);
+    lcd.print(minuto);
+  }
+  else{
+    lcd.setCursor(10,1);
+    lcd.print(minuto); 
+  }
+}
+
+void cH(){
+  potenH=analogRead(0);   
+  potenH=map(potenH,0,1023,0,23);  
+  hora=potenH;
+  potenM=analogRead(1);   
+  potenM=map(potenM,0,1023,0,60);  
+  minuto=potenM;
+}
+
+
+void sensores(){
+  
+  if(digitalRead(btn1)==HIGH)
+    sen1 = "El sensor 1 se activo";
+  if(digitalRead(btn1)==LOW)
+    sen1 = "El sensor 1 se desctivo";
+  if(digitalRead(btn2)==HIGH)
+    sen2 = "El sensor 2 se activo";
+  if(digitalRead(btn2)==LOW)
+    sen2 = "El sensor 2 se desactivo";
+  if(digitalRead(btn3)==HIGH)
+    sen3 = "El sensor 3 se activo";
+  if(digitalRead(btn3)==LOW)
+    sen3 = "El sensor 3 se desactivo";
+  if(digitalRead(btn4)==HIGH)
+    sen4 = "El sensor 4 se activo";
+  if(digitalRead(btn4)==LOW)
+    sen4 = "El sensor 4 se desactivo";
+  Serial.println("Estado.. ");
+  Serial.println(sen1);
+  Serial.println(sen2);
+  Serial.println(sen3);
+  Serial.println(sen4);
+}
+
+void luces(){   
+  if(int2==1){    
+    if(cont<=20){    
+      cont++;   
+      aleatoria=random(1,4);  
+      switch(aleatoria){   
+        case 1:
+          digitalWrite(led1,HIGH);
+        break;
+  
+        case 2:
+          digitalWrite(led2,HIGH);
+        break;
+  
+        case 3:
+          digitalWrite(led3,HIGH);
+        break;
+  
+        case 4:
+          digitalWrite(led4,HIGH);
+        break;
+  
+        case 5:
+          digitalWrite(led1,LOW);
+        break;
+  
+        case 6:
+          digitalWrite(led2,LOW);
+        break;
+  
+        case 7:
+          digitalWrite(led3,LOW);
+        break;
+        
+        case 8:
+          digitalWrite(led4,LOW);
+        break;
+      } 
+    }
+  }
+}
