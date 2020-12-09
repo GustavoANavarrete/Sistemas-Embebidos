@@ -1,0 +1,182 @@
+/*
+ * Deber 6: Realizar un reloj con alarma ingresada por comunicación serial.  Los números sean vistos en displays.
+ * 
+ * 
+ */
+
+#include<TimerOne.h> 
+#include<LiquidCrystal.h> 
+#include<MsTimer2.h>
+
+LiquidCrystal lcd{13,12,11,10,9,8}; 
+int horas=0; 
+int minutos=0;
+const int speaker=5;
+const int led=7;
+volatile long int segundos=0;
+int estado1=0;
+int estado2=0;
+int conversor;
+int conversor2;
+int conversor3;
+int conversor4;
+int n=0;
+
+int seg=0;
+int h=0;
+int m=0;
+
+int horero;
+int minutero;
+int hor;
+int minu;
+float val;
+int val2;
+
+
+void setup() {
+  
+  lcd.begin(16,2);
+  Timer1.initialize(1000000); 
+  pinMode(speaker,OUTPUT);
+  Timer1.attachInterrupt(hora); 
+  pinMode(led,OUTPUT);
+  attachInterrupt(0, contador, LOW);
+  attachInterrupt(1, activacion, LOW);
+  estados();
+
+  
+
+}
+
+
+void loop() {
+  
+
+}
+
+void estados(){
+  if(estado2==0 && estado1==0){
+    
+    if(horas==h && minutos==m){
+      analogWrite(speaker,150);
+      digitalWrite(led,HIGH);
+    
+  }
+  if(horas!=h || minutos!=m){
+    analogWrite(speaker,0);
+    digitalWrite(led,LOW);
+  }
+  }
+}
+
+void hora(){
+  segundos++;
+  if(segundos>59){
+    segundos=0;
+    minutos++;  
+  }
+  if(minutos>59){
+    minutos=0;
+    horas++;
+  }
+  if(horas==24){
+    horas=0;
+  }
+  if(estado2==0){
+    lcd.setCursor(0,0);
+    lcd.print("La hora es: ");
+    lcd.setCursor(5,0);
+  if (horas<10) 
+    lcd.print("0");
+    lcd.print(horas);
+    lcd.setCursor(7,0);
+    lcd.print(":");
+    lcd.setCursor(8,0);
+  if (minutos<10) 
+    lcd.print("0");
+    lcd.print(minutos);
+    lcd.setCursor(10,0);
+    lcd.print(":");
+    lcd.setCursor(11,0);
+  if (segundos<10) 
+    lcd.print("0");
+    lcd.print(segundos);
+  if(horas>12){
+    lcd.setCursor(14,0);
+    lcd.print("PM");
+  }else{
+      lcd.setCursor(14,0);
+      lcd.print("AM");
+  }
+  }else if(estado2==1){
+    lcd.clear();
+    conversor=analogRead(0);
+    conversor2=analogRead(1);
+    lcd.setCursor(0,0);
+    lcd.print("Hora:");
+    lcd.setCursor(7,0);
+    horero=map(conversor, 0, 1023, 0, 24);
+    horas=horero;
+    lcd.println(horas);
+    lcd.setCursor(9,0);
+    lcd.println(":");
+    minutero=map(conversor2, 0, 1023, 0,60);
+    lcd.setCursor(10,0);
+    minutos=minutero;
+    lcd.println(minutos); 
+}
+}
+
+void contador(){
+  switch(estado1){
+    case 0:
+      Serial.println("Modos: ");
+      Serial.println("Poner alarma 1");
+      Serial.println("visualizar reloj 2");
+      
+     case 1:
+      Serial.println("Ponga la alrma");
+      estado1++;
+    
+     break;
+    case 2:
+      Serial.println("Alarma programada");
+      estado1++;
+    break;
+
+    case 3:
+    Serial.println("Alarma apagada");
+    lcd.clear();
+    estado1=0;
+    n=0;
+    break;
+    }
+  }
+
+
+void activacion(){
+  if(estado1==2){
+    switch(estado2){
+      case 0:
+        Serial.println("ingresa la hora: ");
+        estado2++;
+      break;
+  
+      case 1:
+        Serial.println("Ingrese el minuto: ");
+        estado2++;
+      break;
+  
+      case 2:
+        Serial.println("alarma programada");
+        estado2++;
+      break;
+
+      case 3:
+        Serial.println("alarma eliminada");
+        estado2=0;
+      break;
+    }
+  }
+}
