@@ -1,0 +1,58 @@
+/*
+ * Deber 7: Realiza un programa que valide y actualice una contraseña almacenada en la memoria EEPROM. Como estado inicial, la contraseña es de 4 dígitos que son: 4563.
+ * 
+ */
+
+
+#include <EEPROM.h>
+
+int i=0;  
+int codcontra;  
+int contra=4563; 
+int nuevac;
+ 
+String opc;   
+String dato;  
+String contra1;   
+   
+  
+void setup() {
+  Serial.begin(9600);
+  EEPROM.write(0,contra);  
+  Serial.println("Ingrese la contraseña correcta");
+  verificacion();
+}
+
+void loop() {
+
+}
+
+void verificacion(){
+  if(Serial.available()>0){
+    dato=Serial.readString();   
+    codcontra=dato.toInt();     
+    if(codcontra==contra){       
+      Serial.println("La contraseña ingresada es correcta");
+      Serial.println("Cambiar Contraseña? Si o No?");
+      delay(500);
+      opc=Serial.readString();
+      
+      if(opc=="si"){    
+        Serial.println("digita la contrseña nueva");
+        delay(500);
+        contra1=Serial.readString();        
+        nuevac=contra1.toInt();
+        contra= nuevac;      
+        EEPROM.update(0,contra);   
+        Serial.println("Tu contrseña se actualizo");
+      }
+      else{
+        Serial.println("Ocurrio un error intenta mas tarde");
+      }
+    }
+    else{
+      Serial.println("Contrseña mal ingresada, intenta denuevo");
+    }
+  }
+  
+}
