@@ -1,0 +1,47 @@
+int x = 450;
+int y = 300;
+
+
+void setup()
+{
+size(800,600);
+background(#003ED6);
+}
+
+void draw()
+{
+if(keyPressed)
+{
+
+switch(keyCode){
+  
+case 38: //Para usar las teclas
+y--;
+break;
+case 40:
+y++;
+break;
+case 39: 
+x++;
+break;
+case 37: 
+x--;
+break;
+
+default:
+break;
+}
+background(#003ED6);
+if(x>=575) //limitamos los bordes
+x= 575;
+if(x<=25) 
+x=25;
+if(y>=575) 
+y= 575;
+if(y<=25) 
+y=25;
+
+ellipse(x,y,70,70);
+
+}
+}
