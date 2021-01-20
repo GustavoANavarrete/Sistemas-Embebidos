@@ -1,0 +1,225 @@
+//////////////////////////Arduino/////////////////////////////////
+
+#include <SoftwareSerial.h>
+#define portrx  13
+#define porttx  12
+
+SoftwareSerial serialport (portrx, porttx);
+
+int muestras=14;  
+float orden;  
+String dato;  
+int tam;  
+float peso;
+float n;
+float numero=0;
+float d=0;
+int fila=0;  
+
+//Calculo del peso
+int sx=0;  
+float sy=0; 
+float sxy=0; 
+long int sx2=0;  
+long int sx3=0;  
+
+int matriz [14][2]={
+  {170,67},
+  {180,80},
+  {170,65},
+  {178,75},
+  {160,55},
+  {163,60},
+  {165,63},
+  {170,70},
+  {164,62},
+  {176,77},
+  {164,60},
+  {170,76},
+  {170,56},
+  {168,60},
+  
+};
+
+void setup() {
+  pinMode(portrx, INPUT);
+  pinMode(porttx, OUTPUT);
+  
+  Serial.begin(9600);
+  serialport.begin(9600);
+
+  for(fila=0;fila<muestras;fila++){
+    sx=sx+matriz[fila][0];
+    sy=sy+log(matriz[fila][1]);
+    sxy = sxy+(matriz[fila][0]*log(matriz[fila][1]));
+    sx2 = sx2+pow(matriz[fila][0],2);
+
+    
+  }
+
+  
+  sx3=pow(sx,2);
+  numero=float(muestras*sxy)-float(sx*sy);
+  d=muestras*sx2-sx3;
+  orden=float(numero/d);
+  float ny =sy/muestras;
+  float nx=sx/muestras;
+  float anx = orden*nx;
+  float n1 = ny-anx;
+  n= exp(n1);
+  
+  Serial.println("Bienvenido Coloca tu estatura para aproximar tu peso: ");
+
+
+  
+}
+
+void loop() {
+  if(Serial.available()>0){
+    dato = Serial.readString();
+    tam=dato.toInt();
+    serialport.write(tam);
+    peso = n*exp(orden*tam);
+    
+    Serial.println(String(" Pesas aproximadamente ")+String(peso)+String(" Kilogramos"));
+    Serial.println("Coloca tu estatura en cm: ");
+
+
+    
+  }
+
+  
+}
+
+/////////////////////////////////Processing///////////////////////////////////
+
+import processing.serial.*;
+Serial port;  
+
+int muestras=14;  
+float orden;  
+int tam;  
+float peso;
+float n;
+float tendencialineal;
+int altura;
+int epeso;
+int filas=0;
+int columnas=0;
+int i=0;
+float numero=0;
+float d=0;
+int fila=0;  
+
+//Operacion de peso
+int sx=0; 
+float sy=0; 
+float sxy=0;  
+float sx2=0;  
+float sx3=0; 
+
+
+int [][] matriz ={
+  {170,67},
+  {180,80},
+  {170,65},
+  {178,75},
+  {160,55},
+  {163,60},
+  {165,63},
+  {170,70},
+  {164,62},
+  {176,77},
+  {164,60},
+  {170,76},
+  {170,56},
+  {168,60}
+};
+
+
+void setup(){
+  size(750,700);  
+  background(#B41414);  
+  port=new Serial(this, "COM10" , 9600);
+  
+  for(;fila<muestras;fila++){
+    sx=sx+matriz[fila][0];
+    sy = sy+log(matriz[fila][1]);
+    sxy = sxy+(matriz[fila][0]*log(matriz[fila][1]));
+    sx2 = sx2+pow(matriz[fila][0],2);
+  }
+  
+  
+  sx3=pow(sx,2);
+  numero=muestras*sxy - sx*sy;
+  d=muestras*sx2-sx3;
+  orden=numero/d;
+  float ny=sy/muestras;
+  float nx=sx/muestras;
+  float anx=orden*nx;
+  float n1 = ny-anx;
+  n=exp(n1);
+
+} 
+
+
+void draw(){
+  
+  background(#B41414);  
+  textSize(35);
+  fill(#FAF7F7);
+  text("Laboratorio 4 - Tendencia exponencial",40,40);
+  stroke(0);
+  strokeWeight(2);
+  line(50,110,50,650);   
+  line(50,650,650,650);  
+  for(i=160;i<=180;i++){
+    tendencialineal=n*exp(orden*i);
+    stroke(0);
+    strokeWeight(1);
+    fill(#FAAF17);
+    ellipse(i*20-3050,650-tendencialineal*6,5,5);
+  }  
+  
+  for(i=0;i<14;i++){
+    altura = matriz[i][0];
+    epeso = matriz[i][1]; 
+    stroke(0);
+    strokeWeight(1);
+    fill(#AA0A98);
+    ellipse(altura*20-3050,650-epeso*6,7.5,7.5);
+  } 
+
+
+    
+  for (int mapaY=110; mapaY<=590 ; mapaY=mapaY+60){
+    filas++;
+    textSize(15);
+    fill(0);
+    text(filas*10,20,710-mapaY);
+    if (filas==9)
+      filas=0;
+  }  
+  
+  for (int mapaX=150; mapaX<=690 ; mapaX=mapaX+100){
+    columnas++;
+    textSize(15);
+    fill(0);
+    text(columnas*5+155,mapaX-12,670);
+    if (columnas==6)
+      columnas=0;
+    
+  } 
+    peso = n*exp(orden*tam);
+    stroke(0);
+    strokeWeight(2);
+    fill(#3FAA0A);
+    ellipse(tam*20-3050,650-peso*6,10,10);  
+
+} 
+
+
+void serialEvent(Serial puerto){
+  tam=puerto.read();
+  println(tam);
+} 
